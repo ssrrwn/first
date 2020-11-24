@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/konva@4.0.18/konva.min.js"></script>
+
+    <meta charset="utf-8" />
+    <title>Konva Drop DOM element Demo</title>
+    <style>
+        .responsive {
+  width: 100%;
+  height: auto;
+        }
+      body {
+        
+        margin-top: 10px;
+        margin-left: 100px;
+        margin-right: 378px;
+     
+        padding: 0;
+        overflow: hidden;
+        background-color: #000000;
+    
+        
+
+      }
+
+      #container {
+    
+        background-color: rgba(0, 0, 0, 0.1);
+        height: 500;
+        max-height: 500;
+        min-height: auto;
+        width: 1200;
+        max-width: 1200px;
+        min-width: auto;
+        border: 1px outset rgb(255, 255, 255);
+        overflow: hidden;
+        
+
+      }
+
+      p {
+        margin-top: 10px;
+        margin-left: 100px;
+        margin-right: 300px;
+
+      }
+
+      #drag-items img {
+        height: 80px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p>
+        
+        <H1 style="font-family:Helvetica; color:rgb(255,255,255); font-size: 13px; font-weight: lighter">DRAG AND DROP THE FLAG INTO THE BOX</p>
+
+    <div id="drag-items">
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/1200px-Flag_of_South_Korea.svg.png" draggable="true" />
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Flag_of_North_Korea.svg/1200px-Flag_of_North_Korea.svg.png" draggable="true" />
+        
+
+
+
+    <div id="container"></div>
+ 
+
+    <script>
+      var width = 1200;
+      var height = 800;
+      
+      
+      
+      
+
+      var stage = new Konva.Stage({
+        container: 'container',
+        width: 1200,
+        height: 800,
+      
+      });
+      var layer = new Konva.Layer();
+      stage.add(layer);
+
+      // what is url of dragging element?
+      var itemURL = '';
+      document
+        .getElementById('drag-items')
+        .addEventListener('dragstart', function (e) {
+          itemURL = e.target.src;
+        });
+
+      var con = stage.container();
+      con.addEventListener('dragover', function (e) {
+        e.preventDefault(); // !important
+      });
+
+      con.addEventListener('drop', function (e) {
+        e.preventDefault();
+        // now we need to find pointer position
+        // we can't use stage.getPointerPosition() here, because that event
+        // is not registered by Konva.Stage
+        // we can register it manually:
+        stage.setPointersPositions(e);
+
+        Konva.Image.fromURL(itemURL, function (image) {
+          layer.add(image );
+         
+          image.position(stage.getPointerPosition());
+          image.draggable(true);
+          image.opacity(0.3);
+         
+        
+         
+        
+
+          layer.draw();
+          
+          
+        });
+      });
+    </script>
+  </body>
+</html>
